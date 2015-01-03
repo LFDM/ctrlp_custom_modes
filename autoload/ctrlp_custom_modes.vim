@@ -87,9 +87,17 @@ function! s:parse(name, input)
   let s:parsed[a:name] = { 'pre' : pre, 'post' : post}
 endfunction
 
+" Generate an update function, e.g. given a custom mode called
+"   templates
+" like this:
+"
+" function! g:ctrlp_custom_modes_update_templates(str)
+"   return s:parsed['templates']['pre'].a:str.s:parsed['templates']['post']
+" endfunction
 function! s:generate_update_fn(name)
+  let def = 's:parsed["'.a:name.'"]'
   let head = 'function! g:ctrlp_custom_modes_update_'.a:name.' (str)'
-  let body = 'return s:parsed["'.a:name.'"]["pre"].a:str.s:parsed["'.a:name.'"]["post"]'
+  let body = 'return '.def.'["pre"].a:str.'.def.'["post"]'
   let foot = 'endfunction'
   let cmd = join([head, body, foot], "\n")
   execute cmd
