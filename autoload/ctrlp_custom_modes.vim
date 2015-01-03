@@ -39,8 +39,15 @@ function! s:generate_update_fn(name)
   execute cmd
 endfunction
 
+function! s:cleanup_update_fns()
+  for [name, id] in s:ids
+    exec 'delf '.s:update_fn(name)
+  endfor
+endfunction
+
 function! s:setup()
   if !exists('g:ctrlp_extensions') | let g:ctrlp_extensions = [] | endif
+  if exists('s:ids') | call s:cleanup_update_fns() | endif
   let s:input_exts = {}
   let s:ids = []
 endfunction
