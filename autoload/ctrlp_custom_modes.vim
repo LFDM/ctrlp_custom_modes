@@ -76,20 +76,20 @@ function! s:register(name)
     \ })
 
   let id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
-  let b = " \n"
-  "execute "function! ctrlp#".a:name."#id()" .b. "return ".id.b. "endfunction"
+  let s:ids[a:name] = id
 endfunction
 
-let g:ctrlp_custom_modes_parsed = {}
+let s:parsed = {}
+let s:ids    = {}
 
 function! s:parse(name, input)
   let [pre, post] = split(a:input, '@@input@@')
-  let g:ctrlp_custom_modes_parsed[a:name] = { 'pre' : pre, 'post' : post}
+  let s:parsed[a:name] = { 'pre' : pre, 'post' : post}
 endfunction
 
 function! s:generate_update_fn(name)
   let head = 'function! g:ctrlp_custom_modes_update_'.a:name.' (str)'
-  let body = 'return g:ctrlp_custom_modes_parsed["'.a:name.'"]["pre"].a:str.g:ctrlp_custom_modes_parsed["'.a:name.'"]["post"]'
+  let body = 'return s:parsed["'.a:name.'"]["pre"].a:str.s:parsed["'.a:name.'"]["post"]'
   let foot = 'endfunction'
   let cmd = join([head, body, foot], "\n")
   execute cmd
