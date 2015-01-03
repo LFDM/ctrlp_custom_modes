@@ -11,11 +11,11 @@ function! s:register(name)
     \ })
 
   let id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
-  let s:ids[a:name] = id
+  call add(s:ids, [[a:name], id])
 endfunction
 
 let s:input_exts= {}
-let s:ids    = {}
+let s:ids    = []
 
 function! s:parse(name, input)
   let [pre, post] = split(a:input, '@@input@@')
@@ -44,20 +44,8 @@ function! ctrlp_custom_modes#setup()
   endif
 endfunction
 
-function! s:init_commands()
-  "for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    "exec 'com! CtrlPCustomMode'.i. ' ""'
-  "endfor
-
-  "let i = 1;
-  "for [name, id] in items(s:ids)
-    "exec 'com! CtrlPCustomMode'.i.' ctrlp#init('.id.')'
-    "let i += 1
-  "endfor
-endfunction
-
 function! ctrlp_custom_modes#init_extensions(exts)
-  for [name, ext] in items(a:exts)
+  for [name, ext] in a:exts
     call s:parse(name, ext)
     call s:generate_update_fn(name)
     call s:register(name)
@@ -67,10 +55,9 @@ function! ctrlp_custom_modes#init_extensions(exts)
 endfunction
 
 function! ctrlp_custom_modes#init(i)
-  let exts = items(s:ids)
-  let max  = len(exts) - a:i
+  let max  = len(s:ids) - 1
   if a:i <= max
-    let ext = exts[a:i]
+    let ext = s:ids[a:i]
     call ctrlp#init(ext[1])
   else
     echo "No custom mode defined"
