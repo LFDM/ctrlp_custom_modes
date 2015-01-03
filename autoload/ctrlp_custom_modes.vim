@@ -14,8 +14,8 @@ function! s:register(name)
   call add(s:ids, [[a:name], id])
 endfunction
 
-let s:input_exts= {}
-let s:ids    = []
+let s:input_exts = {}
+let s:ids = []
 
 function! s:parse(name, input)
   let [pre, post] = split(a:input, '@@input@@')
@@ -51,7 +51,6 @@ function! ctrlp_custom_modes#init_extensions(exts)
     call s:register(name)
     call add(g:ctrlp_extensions, name)
   endfor
-
 endfunction
 
 function! ctrlp_custom_modes#init(i)
@@ -70,5 +69,3 @@ endfunction
 " - Properly reinit the extensions, but only when
 "   - the root path changes and we find a new (or no) file
 " - Init key mappings
-
-
