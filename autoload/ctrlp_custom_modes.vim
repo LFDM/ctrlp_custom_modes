@@ -79,12 +79,12 @@ function! s:register(name)
   let s:ids[a:name] = id
 endfunction
 
-let s:parsed = {}
+let s:input_exts= {}
 let s:ids    = {}
 
 function! s:parse(name, input)
   let [pre, post] = split(a:input, '@@input@@')
-  let s:parsed[a:name] = { 'pre' : pre, 'post' : post}
+  let s:input_exts[a:name] = { 'pre' : pre, 'post' : post}
 endfunction
 
 " Generate an update function, e.g. given a custom mode called
@@ -92,10 +92,10 @@ endfunction
 " like this:
 "
 " function! g:ctrlp_custom_modes_update_templates(str)
-"   return s:parsed['templates']['pre'].a:str.s:parsed['templates']['post']
+"   return s:input_exts['templates']['pre'].a:str.s:input_exts['templates']['post']
 " endfunction
 function! s:generate_update_fn(name)
-  let def = 's:parsed["'.a:name.'"]'
+  let def = 's:input_exts["'.a:name.'"]'
   let head = 'function! g:ctrlp_custom_modes_update_'.a:name.' (str)'
   let body = 'return '.def.'["pre"].a:str.'.def.'["post"]'
   let foot = 'endfunction'
