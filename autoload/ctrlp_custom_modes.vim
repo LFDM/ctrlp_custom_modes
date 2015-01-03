@@ -87,12 +87,11 @@ function! s:parse(name, input)
   let g:ctrlp_custom_modes_parsed[a:name] = { 'pre' : pre, 'post' : post}
 endfunction
 
-function! ctrlp_custom_modes#generate_update_fn(name)
+function! s:generate_update_fn(name)
   let head = 'function! g:ctrlp_custom_modes_update_'.a:name.' (str)'
   let body = 'return g:ctrlp_custom_modes_parsed["'.a:name.'"]["pre"].a:str.g:ctrlp_custom_modes_parsed["'.a:name.'"]["post"]'
   let foot = 'endfunction'
-  let cmd = join([head, ech, body, foot], "\n")
-  echo cmd
+  let cmd = join([head, body, foot], "\n")
   execute cmd
 endfunction
 
@@ -103,7 +102,7 @@ function! ctrlp_custom_modes#add_extensions(exts)
 
   for [name, ext] in items(a:exts)
     call s:parse(name, ext)
-    call ctrlp_custom_modes#generate_update_fn(name)
+    call s:generate_update_fn(name)
     call s:register(name)
     call add(g:ctrlp_extensions, name)
   endfor
