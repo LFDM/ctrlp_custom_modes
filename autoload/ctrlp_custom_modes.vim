@@ -38,11 +38,13 @@ function! s:generate_update_fn(name)
   execute cmd
 endfunction
 
-function! ctrlp_custom_modes#add_extensions(exts)
+function! ctrlp_custom_modes#setup()
   if !exists('g:ctrlp_extensions')
     let g:ctrlp_extensions = []
   endif
+endfunction
 
+function! ctrlp_custom_modes#init_extensions(exts)
   for [name, ext] in items(a:exts)
     call s:parse(name, ext)
     call s:generate_update_fn(name)

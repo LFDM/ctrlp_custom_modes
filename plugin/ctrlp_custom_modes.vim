@@ -4,9 +4,11 @@ if ( exists('g:loaded_ctrlp_custom_modes') && g:loaded_ctrlp_custom_modes)
 	finish
 endif
 
-let extensions = { 'directives' : 'directives/@@input@@.js', 'templates': 'app/templates/@@input@@.html' }
 
-call ctrlp_custom_modes#add_extensions(extensions)
+call ctrlp_custom_modes#setup()
+
+let extensions = { 'directives' : 'directives/@@input@@.js', 'templates': 'app/templates/@@input@@.html' }
+call ctrlp_custom_modes#init_extensions(extensions)
 let g:loaded_ctrlp_custom_modes = 1
 
 
