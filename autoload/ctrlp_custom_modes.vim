@@ -6,7 +6,7 @@ function! s:register(name)
     \ 'lname': 'custom: '.a:name,
     \ 'sname': shortname,
     \ 'type': 'path',
-    \ 'update': 'g:ctrlp_custom_modes_update_'.a:name,
+    \ 'update': s:update_fn(a:name),
     \ 'sort': 0,
     \ })
 
@@ -19,6 +19,10 @@ function! s:parse(name, input)
   let s:input_exts[a:name] = { 'pre' : pre, 'post' : post}
 endfunction
 
+function! s:update_fn(name)
+  return 'g:ctrlp_custom_modes_update_'.a:name
+endfunction
+
 " Generate an update function, e.g. given a custom mode called
 "   templates
 " like this:
@@ -28,7 +32,7 @@ endfunction
 " endfunction
 function! s:generate_update_fn(name)
   let def = 's:input_exts["'.a:name.'"]'
-  let head = 'function! g:ctrlp_custom_modes_update_'.a:name.' (str)'
+  let head = 'function! '.s:update_fn(a:name).'(str)'
   let body = 'return '.def.'["pre"].a:str.'.def.'["post"]'
   let foot = 'endfunction'
   let cmd = join([head, body, foot], "\n")
