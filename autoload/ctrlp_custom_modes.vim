@@ -11,7 +11,7 @@ function! s:register(name)
     \ })
 
   let id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
-  call add(s:ids, [[a:name], id])
+  call add(s:ids, [a:name, id])
 endfunction
 
 function! s:parse(name, input)
