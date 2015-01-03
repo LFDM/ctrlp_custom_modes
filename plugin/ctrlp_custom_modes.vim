@@ -3,14 +3,8 @@ if ( exists('g:loaded_ctrlp_custom_modes') && g:loaded_ctrlp_custom_modes)
 	finish
 endif
 
-call ctrlp_custom_modes#setup()
+call ctrlp_custom_modes#start()
 
-let extensions = [
-      \ ['directives', 'directives/@@input@@.js'],
-      \ ['templates', 'app/templates/@@input@@.html'],
-    \ ]
-
-call ctrlp_custom_modes#init_extensions(extensions)
 let g:loaded_ctrlp_custom_modes = 1
 
 for i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]

@@ -14,9 +14,6 @@ function! s:register(name)
   call add(s:ids, [[a:name], id])
 endfunction
 
-let s:input_exts = {}
-let s:ids = []
-
 function! s:parse(name, input)
   let [pre, post] = split(a:input, '@@input@@')
   let s:input_exts[a:name] = { 'pre' : pre, 'post' : post}
@@ -38,19 +35,45 @@ function! s:generate_update_fn(name)
   execute cmd
 endfunction
 
-function! ctrlp_custom_modes#setup()
-  if !exists('g:ctrlp_extensions')
-    let g:ctrlp_extensions = []
-  endif
+function! s:setup()
+  if !exists('g:ctrlp_extensions') | let g:ctrlp_extensions = [] | endif
+  let s:input_exts = {}
+  let s:ids = []
 endfunction
 
-function! ctrlp_custom_modes#init_extensions(exts)
+" Taken from tpope at https://github.com/tpope/vim-projectionist/blob/ef252eb227928df6f63590f21584a46c08792021/autoload/projectionist.vim#L57-L68
+function! s:json_parse(string)
+  let [null, false, true] = ['', 0, 1]
+  let string = type(a:string) == type([]) ? join(a:string, ' ') : a:string
+  let stripped = substitute(string, '\C"\(\\.\|[^"\\]\)*"', '', 'g')
+  if stripped !~# "[^,:{}\\[\\]0-9.\\-+Eaeflnr-u \n\r\t]"
+    try
+      return eval(substitute(string, "[\r\n]", ' ', 'g'))
+    catch
+    endtry
+  endif
+  throw "invalid JSON: ".string
+endfunction
+
+function! s:init_extensions(exts)
   for [name, ext] in a:exts
     call s:parse(name, ext)
     call s:generate_update_fn(name)
     call s:register(name)
     call add(g:ctrlp_extensions, name)
   endfor
+endfunction
+
+function! ctrlp_custom_modes#start()
+  call s:setup()
+  let file = '.ctrlp_custom_modes.json'
+
+  if filereadable(file)
+    let extensions = s:json_parse(readfile(file))
+    call s:init_extensions(extensions)
+  else
+    echo "No CtrlPCustomMode json file found"
+  endif
 endfunction
 
 function! ctrlp_custom_modes#init(i)
@@ -62,6 +85,7 @@ function! ctrlp_custom_modes#init(i)
     echo "No custom mode defined"
   endif
 endfunction
+
 
 " TODO
 "
