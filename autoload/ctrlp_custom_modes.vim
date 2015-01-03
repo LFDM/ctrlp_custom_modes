@@ -70,7 +70,7 @@ function! s:register(name)
     \ 'accept': 'ctrlp#acceptfile',
     \ 'lname': 'custom: '.a:name,
     \ 'sname': shortname,
-    \ 'type': 'line',
+    \ 'type': 'file',
     \ 'update': 'g:ctrlp_custom_modes_update_'.a:name,
     \ 'sort': 0,
     \ })
