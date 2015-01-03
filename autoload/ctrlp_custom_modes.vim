@@ -116,4 +116,11 @@ function! ctrlp_custom_modes#add_extensions(exts)
   endfor
 endfunction
 
+" TODO
+"
+" - Really parse for a definition file
+" - Properly reinit the extensions, but only when
+"   - the root path changes and we find a new (or no) file
+" - Init key mappings
+
 
