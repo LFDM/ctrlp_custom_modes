@@ -64,6 +64,7 @@ function! s:init_extensions(exts)
   endfor
 endfunction
 
+let s:silent = 0
 function! ctrlp_custom_modes#start()
   call s:setup()
   let file = '.ctrlp_custom_modes.json'
@@ -72,8 +73,16 @@ function! ctrlp_custom_modes#start()
     let extensions = s:json_parse(readfile(file))
     call s:init_extensions(extensions)
   else
-    echo "No CtrlPCustomMode json file found"
+    if !s:silent
+      echo "No CtrlPCustomMode json file found"
+    endif
   endif
+endfunction
+
+function! ctrlp_custom_modes#start_silent()
+  let s:silent = 1
+  call ctrlp_custom_modes#start()
+  let s:silent = 0
 endfunction
 
 function! ctrlp_custom_modes#init(i)

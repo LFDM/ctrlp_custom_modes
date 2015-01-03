@@ -3,7 +3,7 @@ if ( exists('g:loaded_ctrlp_custom_modes') && g:loaded_ctrlp_custom_modes)
 	finish
 endif
 
-call ctrlp_custom_modes#start()
+call ctrlp_custom_modes#start_silent()
 
 let g:loaded_ctrlp_custom_modes = 1
 
