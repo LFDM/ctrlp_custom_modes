@@ -44,6 +44,18 @@ function! ctrlp_custom_modes#setup()
   endif
 endfunction
 
+function! s:init_commands()
+  "for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    "exec 'com! CtrlPCustomMode'.i. ' ""'
+  "endfor
+
+  "let i = 1;
+  "for [name, id] in items(s:ids)
+    "exec 'com! CtrlPCustomMode'.i.' ctrlp#init('.id.')'
+    "let i += 1
+  "endfor
+endfunction
+
 function! ctrlp_custom_modes#init_extensions(exts)
   for [name, ext] in items(a:exts)
     call s:parse(name, ext)
@@ -51,6 +63,18 @@ function! ctrlp_custom_modes#init_extensions(exts)
     call s:register(name)
     call add(g:ctrlp_extensions, name)
   endfor
+
+endfunction
+
+function! ctrlp_custom_modes#init(i)
+  let exts = items(s:ids)
+  let max  = len(exts) - a:i
+  if a:i <= max
+    let ext = exts[a:i]
+    call ctrlp#init(ext[1])
+  else
+    echo "No custom mode defined"
+  endif
 endfunction
 
 " TODO
