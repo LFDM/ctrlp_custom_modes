@@ -15,7 +15,7 @@ function! s:register(name)
 endfunction
 
 function! s:parse(name, input)
-  let [pre, post] = split(a:input, '@@input@@')
+  let [pre, post] = split(a:input, '@@input@@', 1)
   let s:input_exts[a:name] = { 'pre' : pre, 'post' : post}
 endfunction
 
