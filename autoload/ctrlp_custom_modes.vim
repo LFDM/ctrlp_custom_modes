@@ -75,10 +75,26 @@ function! s:init_extensions(exts)
   endfor
 endfunction
 
+" Taken from the CtrlP docs at https://github.com/ctrlpvim/ctrlp.vim/blob/f8fd9793503b06b2b5f7efe372955322fc4727cd/doc/ctrlp.txt#L1263-L1271
+function! s:setcwd()
+  let cph = expand('%:p:h', 1)
+  if cph =~ '^.\+://' | retu | en
+  for mkr in ['.git/', '.hg/', '.svn/', '.bzr/', '_darcs/', '.vimprojects']
+    let wd = call('find'.(mkr =~ '/$' ? 'dir' : 'file'), [mkr, cph.';'])
+    if wd != '' | let &acd = 0 | brea | en
+  endfo
+  exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
+endfunction
+
 let s:silent = 0
 function! ctrlp_custom_modes#start()
   call s:setup()
   let file = '.ctrlp_custom_modes.json'
+
+  " Cache the current working directory
+  let cwd = getcwd()
+  " Set working directory to the project root
+  call s:setcwd()
 
   if filereadable(file)
     let extensions = s:json_parse(readfile(file))
@@ -88,6 +104,9 @@ function! ctrlp_custom_modes#start()
       echo "No CtrlPCustomMode json file found"
     endif
   endif
+
+  " Use the cached working directory again
+  exec "lc! ".cwd
 endfunction
 
 function! ctrlp_custom_modes#start_silent()
