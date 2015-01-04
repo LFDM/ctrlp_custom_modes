@@ -102,6 +102,6 @@ function! ctrlp_custom_modes#init(i)
     let ext = s:ids[a:i]
     call ctrlp#init(ext[1])
   else
-    echo "No custom mode defined"
+    echo "No CtrlP custom mode ".a:i." defined"
   endif
 endfunction
